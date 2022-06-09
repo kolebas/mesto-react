@@ -5,7 +5,11 @@ import Card from './Card.js';
 const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
 
   const [cards, setCards] = useState([]);
-  const [profile, setProfile] = useState([]);
+  const [profile, setProfile] = useState({
+    userName: '',
+    userDescription: '',
+    userAvatar: '' 
+ });
 
   useEffect(() => {
     api.getInitialCards().then((data) => {
@@ -17,7 +21,10 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
           key: item._id
         }))
       )
-    });
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }, []);
 
   useEffect(() => {
@@ -28,7 +35,10 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
         userAvatar: data.avatar
       }
       )
-    });
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }, []);
   
   return (

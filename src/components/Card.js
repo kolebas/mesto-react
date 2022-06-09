@@ -5,8 +5,8 @@ const Card = ({ src, title, likeCount, onCardClick}) => {
   }
 
   return (  
-    <div onClick={ handleClick } className="card">
-      <img className="card__image" src={ src } alt={`Изображение ${title}`}/>
+    <div className="card">
+      <img onClick={ handleClick } className="card__image" src={ src } alt={`Изображение ${title}`}/>
       <button className="card__delete-button"></button>
       <div className="card__rectangle">
         <h2 className="card__title">{ title }</h2>

@@ -12,7 +12,7 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState("");  
+  const [selectedCard, setSelectedCard] = useState({});  
 
   const popups = [
     {
@@ -20,14 +20,14 @@ function App() {
       title: "Редактирование профиля",
       name: "edit-profile",
       isOpen: isEditProfilePopupOpen,
+      onClose: closeAllPopups,
+      buttonText: "Сохранить",
       children: 
         <>
             <input id="discover" type="text" name="discover" className="popup__input" minLength="2" maxLength="40" required />
             <span id="discover-error" className="popup__error"></span>
             <input id="job" type="text" name="job" className="popup__input" minLength="2" maxLength="200" required />
             <span id="job-error" className="popup__error"></span>
-            <button className="popup__button popup__button_disabled" type="submit" aria-label="Save" disabled>Сохранить</button>
-            <button onClick={ closeAllPopups } className="popup__close-button" type="button"></button>
         </>
     },
     {
@@ -35,14 +35,14 @@ function App() {
       title: "Новое место",
       name: "new-card",
       isOpen: isAddPlacePopupOpen,
+      onClose: closeAllPopups,
+      buttonText: "Сохранить",
       children: 
         <>
           <input id="title" type="text" placeholder="Название" name="title" className="popup__input" minLength="2" maxLength="30" required/>
           <span id="title-error" className="popup__error"></span>
           <input id="link" type="url" placeholder="Ссылка на картинку" name="link" className="popup__input" required/> 
           <span id="link-error" className="popup__error"></span>
-          <button className="popup__button popup__button_disabled" type="submit" aria-label="Save" disabled>Сохранить</button>
-          <button onClick={ closeAllPopups } className="popup__close-button" type="button"></button>
         </>
     },
     {
@@ -50,12 +50,12 @@ function App() {
       title: "Обновить аватар",
       name: "edit-avatar",
       isOpen: isEditAvatarPopupOpen,
+      onClose: closeAllPopups,
+      buttonText: "Сохранить",
       children: 
         <>
           <input id="avatar-link" type="url" placeholder="Ссылка на картинку" name="avatar-link" className="popup__input" required /> 
           <span id="avatar-link-error" className="popup__error"></span>
-          <button className="popup__button popup__button_disabled" type="submit" aria-label="Save" disabled>Сохранить</button>
-          <button onClick={ closeAllPopups } className="popup__close-button" type="button"></button>
         </>
     },
   ]
@@ -76,15 +76,15 @@ function closeAllPopups(){
   setEditAvatarPopupOpen(false);
   setEditProfilePopupOpen(false);  
   setAddPlacePopupOpen(false);
-  setSelectedCard("");  
+  setSelectedCard({});  
 }
 
 function handleCardClick(card){
   setSelectedCard(card);
 }
 
-function onClose(event){
-  event.currentTarget.parentNode.parentNode.classList.remove("popup_opened");
+function onClose(){
+  setSelectedCard({}); 
 }
 
   return (
