@@ -1,10 +1,10 @@
-import '../index.css';
-import Header from './Header';
-import Main from './Main.js';
-import PopupWithForm from './PopupWithForm.js';
-import ImagePopup from './ImagePopup.js';
-import Footer from './Footer.js';
-import { useState } from 'react';
+import "../index.css";
+import Header from "./Header";
+import Main from "./Main.js";
+import PopupWithForm from "./PopupWithForm.js";
+import ImagePopup from "./ImagePopup.js";
+import Footer from "./Footer.js";
+import { useState } from "react";
 
 
 function App() {
@@ -12,13 +12,13 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState('');  
+  const [selectedCard, setSelectedCard] = useState("");  
 
   const popups = [
     {
       key: 1,
-      title: 'Редактирование профиля',
-      name: 'edit-profile',
+      title: "Редактирование профиля",
+      name: "edit-profile",
       isOpen: isEditProfilePopupOpen,
       children: 
         <>
@@ -32,8 +32,8 @@ function App() {
     },
     {
       key: 2,
-      title: 'Новое место',
-      name: 'new-card',
+      title: "Новое место",
+      name: "new-card",
       isOpen: isAddPlacePopupOpen,
       children: 
         <>
@@ -47,8 +47,8 @@ function App() {
     },
     {
       key: 3,
-      title: 'Обновить аватар',
-      name: 'edit-avatar',
+      title: "Обновить аватар",
+      name: "edit-avatar",
       isOpen: isEditAvatarPopupOpen,
       children: 
         <>
@@ -76,11 +76,15 @@ function closeAllPopups(){
   setEditAvatarPopupOpen(false);
   setEditProfilePopupOpen(false);  
   setAddPlacePopupOpen(false);
-  setSelectedCard('');  
+  setSelectedCard("");  
 }
 
 function handleCardClick(card){
-  setSelectedCard(card);  
+  setSelectedCard(card);
+}
+
+function onClose(event){
+  event.currentTarget.parentNode.parentNode.classList.remove("popup_opened");
 }
 
   return (
@@ -89,7 +93,7 @@ function handleCardClick(card){
       <Header />
       <Main onEditProfile={ handleEditProfileClick } onAddPlace={ handleAddPlaceClick }  onEditAvatar={ handleEditAvatarClick } onCardClick={ handleCardClick } />
         {popups.map((item) =>(<PopupWithForm {...item}> { item.children} </PopupWithForm>))}
-        <ImagePopup card={ selectedCard }  />
+        <ImagePopup card={ selectedCard } onClose={ onClose } />
         <div className="popup" id="popup-submit">
           <div className="popup__container">
             <h2 className="popup__title">Вы уверены?</h2>
