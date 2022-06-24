@@ -1,10 +1,14 @@
 import "../index.css";
+import api from '../utils/api.js';
 import Header from "./Header";
 import Main from "./Main.js";
 import PopupWithForm from "./PopupWithForm.js";
+import EditProfilePopup from "./EditProfilePopup.js";
+import EditAvatarPopup from "./EditAvatarPopup.js";
 import ImagePopup from "./ImagePopup.js";
 import Footer from "./Footer.js";
-import { useState } from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
+import { useEffect, useState } from "react";
 
 
 function App() {
@@ -12,24 +16,19 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});  
+  const [selectedCard, setSelectedCard] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+
+  useEffect(() => {
+    api.setProfile().then((data) => {
+      setCurrentUser(data);
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }, []);
 
   const popups = [
-    {
-      key: 1,
-      title: "Редактирование профиля",
-      name: "edit-profile",
-      isOpen: isEditProfilePopupOpen,
-      onClose: closeAllPopups,
-      buttonText: "Сохранить",
-      children: 
-        <>
-            <input id="discover" type="text" name="discover" className="popup__input" minLength="2" maxLength="40" required />
-            <span id="discover-error" className="popup__error"></span>
-            <input id="job" type="text" name="job" className="popup__input" minLength="2" maxLength="200" required />
-            <span id="job-error" className="popup__error"></span>
-        </>
-    },
     {
       key: 2,
       title: "Новое место",
@@ -45,21 +44,29 @@ function App() {
           <span id="link-error" className="popup__error"></span>
         </>
     },
-    {
-      key: 3,
-      title: "Обновить аватар",
-      name: "edit-avatar",
-      isOpen: isEditAvatarPopupOpen,
-      onClose: closeAllPopups,
-      buttonText: "Сохранить",
-      children: 
-        <>
-          <input id="avatar-link" type="url" placeholder="Ссылка на картинку" name="avatar-link" className="popup__input" required /> 
-          <span id="avatar-link-error" className="popup__error"></span>
-        </>
-    },
   ]
-  
+
+function handleUpdateUser(value){
+  api.updateUserInfo(value).then((data) => {
+    setCurrentUser(data);
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+  closeAllPopups();
+}
+
+function handleUpdateAvatar(value){
+  console.log(value)
+  api.updateAvatar(value).then((data) => {
+    setCurrentUser(data);
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+  closeAllPopups();
+}
+
 function handleEditAvatarClick() {
   setEditAvatarPopupOpen(true);
 }
@@ -88,23 +95,27 @@ function onClose(){
 }
 
   return (
-    <>    
-    <div className="page">
-      <Header />
-      <Main onEditProfile={ handleEditProfileClick } onAddPlace={ handleAddPlaceClick }  onEditAvatar={ handleEditAvatarClick } onCardClick={ handleCardClick } />
-        {popups.map((item) =>(<PopupWithForm {...item}> { item.children} </PopupWithForm>))}
-        <ImagePopup card={ selectedCard } onClose={ onClose } />
-        <div className="popup" id="popup-submit">
-          <div className="popup__container">
-            <h2 className="popup__title">Вы уверены?</h2>
-            <form className="popup__form" name="popup-submit" action="submit" noValidate>
-              <button className="popup__button" type="submit" aria-label="Save">Да</button>
-              <button className="popup__close-button" type="button"></button>
-            </form>
+    <>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="page">
+        <Header />
+        <Main onEditProfile={ handleEditProfileClick } onAddPlace={ handleAddPlaceClick }  onEditAvatar={ handleEditAvatarClick } onCardClick={ handleCardClick } />
+          {popups.map((item) =>(<PopupWithForm {...item}> { item.children} </PopupWithForm>))}
+          <EditProfilePopup isOpen={ isEditProfilePopupOpen } onClose={ closeAllPopups } onUpdateUser={ handleUpdateUser }/> 
+          <EditAvatarPopup isOpen={ isEditAvatarPopupOpen } onClose={ closeAllPopups } onUpdateAvatar= { handleUpdateAvatar } /> 
+          <ImagePopup card={ selectedCard } onClose={ onClose } />
+          <div className="popup" id="popup-submit">
+            <div className="popup__container">
+              <h2 className="popup__title">Вы уверены?</h2>
+              <form className="popup__form" name="popup-submit" action="submit" noValidate>
+                <button className="popup__button" type="submit" aria-label="Save">Да</button>
+                <button className="popup__close-button" type="button"></button>
+              </form>
+            </div>
           </div>
-        </div>
-        <Footer />
-    </div>
+          <Footer />
+      </div>
+    </CurrentUserContext.Provider>
   </>  
   );
 }
