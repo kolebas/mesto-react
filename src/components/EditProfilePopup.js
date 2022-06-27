@@ -26,6 +26,10 @@ const EditProfilePopup = ({isOpen, onClose, onUpdateUser}) => {
     setName(e.target.value)
   } 
 
+  function handleDescriptionChange(e) {
+    setDescription(e.target.value)
+  }
+
   return (
     <PopupWithForm 
       title="Редактирование профиля"
@@ -37,7 +41,7 @@ const EditProfilePopup = ({isOpen, onClose, onUpdateUser}) => {
     >
       <input onChange={ handleNameChange } id="discover" type="text" name="discover" className="popup__input" minLength="2" maxLength="40" defaultValue={ name || '' } required />
       <span id="discover-error" className="popup__error"></span>
-      <input onChange={ e => setDescription(e.target.value) } id="job" type="text" name="job" className="popup__input" minLength="2" maxLength="200" defaultValue={ description || '' } required />
+      <input onChange={ handleDescriptionChange } id="job" type="text" name="job" className="popup__input" minLength="2" maxLength="200" defaultValue={ description || '' } required />
       <span id="job-error" className="popup__error"></span>
     </PopupWithForm>
   )
