@@ -92,17 +92,26 @@ function handleCardLike(card) {
   api.changeLikeCard(!isLiked ? "PUT" : "DELETE", card._id).then((newCard) => {
       setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
   })
+  .catch((error) => {
+    console.log(error)
+  })
 }
 
 function handleCardDelete(card) {
   api.deleteCard("DELETE", card._id).then(() => {
       setCards((state) => state.filter((c) => c._id !== card._id));
   })
+  .catch((error) => {
+    console.log(error)
+  })
 }
 
 function handleAddPlaceSubmit(card) {
   api.addCard("POST", card).then((newCard) => {
     setCards([newCard, ...cards]); 
+  })
+  .catch((error) => {
+    console.log(error)
   })
   closeAllPopups();
 }
@@ -116,7 +125,6 @@ function onClose(){
 }
 
   return (
-    <>
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Header />
@@ -137,7 +145,6 @@ function onClose(){
           <Footer />
       </div>
     </CurrentUserContext.Provider>
-  </>  
   );
 }
 

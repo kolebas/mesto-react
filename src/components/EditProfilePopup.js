@@ -11,37 +11,35 @@ const EditProfilePopup = ({isOpen, onClose, onUpdateUser}) => {
   useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser]); 
-  
-  const profile = {
-    key: 1,
-    title: "Редактирование профиля",
-    name: "edit-profile",
-    isOpen: isOpen,
-    onClose: onClose,
-    buttonText: "Сохранить",
-    children: 
-      <>
-          <input onChange={ e => setName(e.target.value) } id="discover" type="text" name="discover" className="popup__input" minLength="2" maxLength="40" defaultValue={ name } required />
-          <span id="discover-error" className="popup__error"></span>
-          <input onChange={ e => setDescription(e.target.value) } id="job" type="text" name="job" className="popup__input" minLength="2" maxLength="200" defaultValue={ description } required />
-          <span id="job-error" className="popup__error"></span>
-      </>
-  }
+  }, [currentUser,isOpen]); 
 
   function handleSubmit(e) {
     e.preventDefault();
-    
+
     onUpdateUser({
       name: name,
       about: description,
     });
+  }
+  
+  function handleNameChange(e) {
+    setName(e.target.value)
   } 
 
   return (
-    <>
-      <PopupWithForm {...profile} onSubmit={ handleSubmit }> { profile.children} </PopupWithForm>
-    </>
+    <PopupWithForm 
+      title="Редактирование профиля"
+      name="edit-profile"
+      isOpen={ isOpen }
+      onClose={ onClose }
+      buttonText="Сохранить"
+      onSubmit={ handleSubmit }
+    >
+      <input onChange={ handleNameChange } id="discover" type="text" name="discover" className="popup__input" minLength="2" maxLength="40" defaultValue={ name || '' } required />
+      <span id="discover-error" className="popup__error"></span>
+      <input onChange={ e => setDescription(e.target.value) } id="job" type="text" name="job" className="popup__input" minLength="2" maxLength="200" defaultValue={ description || '' } required />
+      <span id="job-error" className="popup__error"></span>
+    </PopupWithForm>
   )
 }
 
