@@ -53,7 +53,6 @@ class Api{
   }
 
   updateUserInfo(data){
-    console.log(data)
     return fetch(this._url + '/users/me', {
       method: 'PATCH',
       headers: this._headers,
