@@ -73,8 +73,8 @@ useEffect(() => {
   api.getInitialCards().then((data) => {
     setCards(
       data.map((item) => ({
-        src: item.link,
-        title: item.name,
+        link: item.link,
+        name: item.name,
         likes: item.likes,
         _id: item._id,
         key: item._id,
